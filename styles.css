@@ -1,0 +1,23 @@
+html,
+body {
+    height: 60vh;
+}
+
+.box {
+    border: 2px solid red;
+    width: 150px;
+    height: 150px;
+}
+
+/* .container .row .col-md-4 {
+    height: 100vh;
+    overflow: auto;
+} */
+
+a {
+    all: unset;
+}
+
+button {
+    margin: 10px;
+}
