@@ -4,7 +4,7 @@ body {
 }
 
 .box {
-    border: 2px solid red;
+    border: 2px solid black;
     width: 150px;
     height: 150px;
 }
@@ -20,4 +20,8 @@ a {
 
 button {
     margin: 10px;
+}
+
+#time {
+    font-size: 50px;
 }
