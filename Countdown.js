@@ -1,8 +1,6 @@
 class Timer {
-    constructor(targetTime, timeElement) {
-        this.seconds = 0
-        this.minutes = 0
-        this.hours = 0
+    constructor(timeElement, startTime) {
+
         /*
         States:
         0 - not started
@@ -12,13 +10,18 @@ class Timer {
         this.state = 0
         this.timeElement = timeElement
         try {
-            this.verify_target(targetTime)
-            this.targetTime = targetTime
+            this.verify_target(startTime)
+            this.startTime = startTime
         } catch (error) {
             console.log(error)
             alert(error)
-            this.targetTime = "24:00:00"
+            this.startTime = "00:01:00"
         }
+        let startTimeArr = this.startTime.split(":")
+        this.seconds = parseInt(startTimeArr[2])
+        this.minutes = parseInt(startTimeArr[1])
+        this.hours = parseInt(startTimeArr[0])
+
         this.id = null
     }
 
@@ -45,17 +48,14 @@ class Timer {
         let timeNow = Date.now()
 
         this.id = setInterval(() => {
-            if (
-                this.calculate_total_seconds(this.toString()) >=
-                this.calculate_total_seconds(this.targetTime)
-            ) {
+            if (this.calculate_total_seconds(this.toString()) === 0) {
                 console.log("Timer finished!")
                 clearInterval(this.id)
                 this.id = null
                 this.state = 0
             }
             if (timeNow - prevSecond > 1000) {
-                this.add_second()
+                this.minus_second()
                 this.timeElement.innerHTML = this.toString()
                 prevSecond = Date.now()
             }
@@ -68,7 +68,13 @@ class Timer {
         this.verify_time()
     }
 
+    minus_second() {
+        this.seconds -= 1
+        this.verify_time()
+    }
+
     verify_time() {
+        // Verify max constraint
         if (this.seconds >= 60) {
             this.minutes += parseInt(this.seconds / 60)
             this.seconds = this.seconds % 60
@@ -81,8 +87,22 @@ class Timer {
             console.log("Time limit exceeded")
             this.reset_time()
         }
+
+        // Verify min constraint
+        if (this.seconds < 0) {
+            // Where we pass 0 threshold we decrement minutes
+            let tempMins = parseInt(-(this.seconds) / 60) + 1
+            this.minutes -= tempMins
+            this.seconds = 60 - (-(this.seconds) - (tempMins - 1) * 60)
+        }
+        if (this.minutes < 0) {
+            let tempHours = parseInt(-(this.minutes) / 60) + 1;
+            this.hours -= tempHours
+            this.minutes = 60 - (-(this.minutes) - (tempHours - 1) * 60)
+        }
     }
 
+    // Verify the given time is in the right format and time constraints
     verify_target(target) {
         let targetArr = target.split(":")
         if (targetArr.length !== 3) {
@@ -112,14 +132,14 @@ class Timer {
 
     reset_time() {
         this.seconds = 0
-        this.minutes = 0
+        this.minutes = 1
         this.hours = 0
         if (this.id) {
             clearInterval(this.id)
             this.id = null
         }
         this.state = 0
-        this.timeElement = "00:00:00"
+        this.timeElement.innerHTML = "00:01:00"
     }
 
     pause_time() {
