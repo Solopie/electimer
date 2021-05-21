@@ -1,6 +1,5 @@
 class Timer {
     constructor(timeElement, startTime) {
-
         /*
         States:
         0 - not started
@@ -12,8 +11,9 @@ class Timer {
         try {
             this.verify_target(startTime)
             this.startTime = startTime
+            console.log("Yeehaw")
         } catch (error) {
-            console.log(error)
+            console.error(error)
             alert(error)
             this.startTime = "00:01:00"
         }
@@ -56,7 +56,7 @@ class Timer {
             }
             if (timeNow - prevSecond > 1000) {
                 this.minus_second()
-                this.timeElement.innerHTML = this.toString()
+                this.timeElement.value = this.toString()
                 prevSecond = Date.now()
             }
             timeNow = Date.now()
@@ -91,14 +91,14 @@ class Timer {
         // Verify min constraint
         if (this.seconds < 0) {
             // Where we pass 0 threshold we decrement minutes
-            let tempMins = parseInt(-(this.seconds) / 60) + 1
+            let tempMins = parseInt(-this.seconds / 60) + 1
             this.minutes -= tempMins
-            this.seconds = 60 - (-(this.seconds) - (tempMins - 1) * 60)
+            this.seconds = 60 - (-this.seconds - (tempMins - 1) * 60)
         }
         if (this.minutes < 0) {
-            let tempHours = parseInt(-(this.minutes) / 60) + 1;
+            let tempHours = parseInt(-this.minutes / 60) + 1
             this.hours -= tempHours
-            this.minutes = 60 - (-(this.minutes) - (tempHours - 1) * 60)
+            this.minutes = 60 - (-this.minutes - (tempHours - 1) * 60)
         }
     }
 
@@ -139,7 +139,7 @@ class Timer {
             this.id = null
         }
         this.state = 0
-        this.timeElement.innerHTML = "00:01:00"
+        this.timeElement.value = "00:01:00"
     }
 
     pause_time() {

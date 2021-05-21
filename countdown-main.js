@@ -9,11 +9,13 @@ let resetButton = document.getElementById("reset-button")
 startButton.onclick = startTimer
 stopButton.onclick = stopTimer
 resetButton.onclick = () => {
+    timeElement.disabled = false
     timer.reset_time()
-    timeElement.innerHTML = "00:01:00"
+    timeElement.value = "00:01:00"
 }
 
 function startTimer() {
+    timeElement.disabled = true
     timer.start(timeElement)
 }
 
